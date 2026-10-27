@@ -38,8 +38,8 @@ A Catalan proof is large, so it runs in two jobs: a build job, then the check jo
 ([split build](docs/execution.md#split-build-for-large-proofs)). This has three
 effects. The bot posts only the final result, not an earlier Lean checkpoint
 comment. The run holds the verifier queue for its full time, up to about 12 hours.
-Nanoda usually stops at its time limit (`incomplete`), and that does not prevent
-Lean Verified. To convert an existing proof repository, see
+Nanoda can end incomplete (time or memory limit); that does not prevent Lean
+Verified. To convert an existing proof repository, see
 [the Catalan section of the problem guide](docs/targets.md#catalans-constant).
 
 The verifier runs up to nine public submissions and one maintainer test in parallel,

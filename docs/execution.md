@@ -128,7 +128,8 @@ so a PR for a split profile starts no job.
    So Comparator's solution build is one Lake call through the shim. It finds
    the restored files up to date, or rebuilds at the submission's own time cost.
    The kernel checks, the audit and the nanoda pass do not change. Nanoda gets
-   the time that is left; for Catalan we expect `incomplete: total_deadline`.
+   the time that is left. For Catalan it can end incomplete (time or memory limit);
+   that does not prevent Lean Verified.
 
 The allow-list (`verifier.build_allowed`, one function for pack and unpack),
 for each source root R of the profile and its solution dependencies:
@@ -215,8 +216,10 @@ and the axiom audit ended 142 minutes after `prepare`, so 178 minutes of the
   So only the final report posts.
 - The queue lease is held for the whole split run: `queue_lease.acquire` has no
   time limit, and the run takes up to about 2 x 350 minutes.
-- Nanoda usually ends as `incomplete` (`total_deadline` or `timeout`): Comparator
-  replays the proof again in the nanoda pass. This does not prevent Lean Verified.
+- Nanoda can end incomplete (time or memory limit); that does not prevent Lean
+  Verified. Comparator replays the proof again in the nanoda pass. In the smoke,
+  nanoda passed in 9164 s with a peak of 11.69 GB of the 14 GiB limit, and 25
+  minutes of the deadline were left.
 
 GitHub's [runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)
 lists public `ubuntu-latest` as **4 vCPU, 16 GB RAM and 14 GB SSD**, checked
