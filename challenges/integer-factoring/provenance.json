@@ -1,0 +1,16 @@
+{
+  "source_repository": "https://github.com/IsaacRudich/SubexponentialDeterministicFactoring",
+  "source_commit": "c91cc3f4947caca8977e81a5d14244f73b5ae2b1",
+  "original_path": "Challenge.lean",
+  "local_path": "Challenge.lean",
+  "git_blob": "6d9bf51d75a2b26e2031101b7c09063b4a987463",
+  "sha256": "c3adce9c7a04732442b615e69b3d33960ebc61dcacc5d281797c303d266ae12b",
+  "byte_identical": true,
+  "source_author": "Isaac Rudich and Louis-Martin Rousseau",
+  "license": "Apache-2.0",
+  "license_git_blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+  "manifest_path": "lake-manifest.json",
+  "manifest_git_blob": "3bcf4ece8f2db54cea6de73858b895b7b094cef1",
+  "lean": "leanprover/lean4:v4.35.0",
+  "mathlib": "56a005855ea17e0b0958f73ec801ae140b0a1679"
+}

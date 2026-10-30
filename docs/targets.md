@@ -88,5 +88,13 @@ posted. Nanoda can end incomplete (time or memory limit); that does not prevent 
 to move an existing proof (for example, Sean Litsey's Catalan repository) into the
 layout that the verifier reads.
 
+## Integer factoring
+
+Closed to issues and PRs. A maintainer can rerun Isaac Rudich and Louis-Martin
+Rousseau's proof of score 0 (time `N^o(1)`) against their unchanged statement in
+`challenges/integer-factoring/Challenge.lean`, with Lean `leanprover/lean4:v4.35.0`.
+See [the statement README](../challenges/integer-factoring/README.md). There is no
+`Race.bound` target for a score above 0 yet.
+
 Integer multiplication and Subset Sum have no trusted statement in this gate.
 SSSP is outside the site submission scope.
