@@ -22,5 +22,6 @@
   "upstream_repo": "https://github.com/IsaacRudich/SubexponentialDeterministicFactoring",
   "upstream_commit": "c91cc3f4947caca8977e81a5d14244f73b5ae2b1",
   "tools_file": "profiles/tools-v4.35.0.json",
-  "manifest_file": "profiles/factoring-lake-manifest.json"
+  "manifest_file": "profiles/factoring-lake-manifest.json",
+  "auto_implicit": true
 }

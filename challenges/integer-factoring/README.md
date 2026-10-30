@@ -46,5 +46,9 @@ challenge is this frozen copy. The Mathlib pin is their unchanged lake-manifest.
 The tools are in [profiles/tools-v4.35.0.json](../../profiles/tools-v4.35.0.json).
 Comparator `e3dcf3083fc5` and lean4export `5a9a355dc6c5` are the v4.35.0 builds of
 the code that the v4.34 profile uses: from our earlier pins, only their toolchain,
-manifest and test files changed. nanoda, landrun and elan are unchanged. The
-generated build sets `autoImplicit=false`. Their own build uses Lean's default.
+manifest and test files changed. nanoda, landrun and elan are unchanged.
+
+Their lakefile sets no Lean options, so their sources elaborate with Lean's default
+`autoImplicit=true`. The profile keeps that default (`auto_implicit`). Other profiles
+build with `autoImplicit=false`. The option changes only how the sources elaborate.
+Comparator still compares the elaborated statement with this frozen copy.

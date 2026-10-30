@@ -182,7 +182,9 @@ def chain_targets(profile, chains):
     return ''.join(chain[-1] + '\n' for chain in chains)
 
 
-def lakefile(roots, manifest_file='profiles/lake-manifest.json'):
+def lakefile(roots, manifest_file='profiles/lake-manifest.json', auto_implicit=False):
+    # A profile may keep Lean's default autoImplicit=true when its upstream build does
+    # (integer factoring). It only changes how sources elaborate; Comparator checks the result.
     result = '''name = "Verifier"
 version = "0.1.0"
 [leanOptions]
@@ -195,6 +197,10 @@ rev = "d13f23b723b8a846827a245b89c10fc7d3f11612"
     manifest = json.loads((ROOT / manifest_file).read_text())
     mathlib = next(p for p in manifest['packages'] if p['name'] == 'mathlib')
     result = result.replace('d13f23b723b8a846827a245b89c10fc7d3f11612', mathlib['rev'])
+    if auto_implicit is not False:
+        if auto_implicit is not True:
+            raise ValueError('auto_implicit must be a boolean')
+        result = result.replace('autoImplicit = false', 'autoImplicit = true')
     for name in roots:
         if not NAME.fullmatch(name):
             raise ValueError('invalid library name')
@@ -282,7 +288,7 @@ def prepare():
     data = receipt(); data['generated_challenge_sha256'] = digest(stage / 'VerifierChallenge.lean'); save(data)
     (stage / 'VerifierAudit.lean').write_text('import ' + profile['solution_module'] + '\n' +
                                            ''.join('#print axioms ' + n + '\n' for n in names))
-    (stage / 'lakefile.toml').write_text(lakefile(profile['source_roots'] + [root for dep in dependencies for root in dep['source_roots']] + ['VerifierChallenge', 'VerifierAudit'], profile.get('manifest_file', 'profiles/lake-manifest.json')))
+    (stage / 'lakefile.toml').write_text(lakefile(profile['source_roots'] + [root for dep in dependencies for root in dep['source_roots']] + ['VerifierChallenge', 'VerifierAudit'], profile.get('manifest_file', 'profiles/lake-manifest.json'), profile.get('auto_implicit', False)))
     (stage / 'lean-toolchain').write_text(request['lean_toolchain'] + '\n')
     shutil.copyfile(ROOT / profile.get('manifest_file', 'profiles/lake-manifest.json'), stage / 'lake-manifest.json')
     (stage / '.lake/build').mkdir(parents=True); (stage / '.lake/packages').mkdir()

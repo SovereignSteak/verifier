@@ -63,6 +63,20 @@ class FrozenFilesTests(unittest.TestCase):
         self.assertEqual(new['lean4export'], '5a9a355dc6c5fd82b69058d433e2ae2e8dfbf8fe')
 
 
+class AutoImplicitTests(unittest.TestCase):
+    # Their lakefile sets no Lean options, so their sources use Lean's default autoImplicit=true.
+    def test_only_this_profile_keeps_lean_default_auto_implicit(self):
+        self.assertIs(PROFILE['auto_implicit'], True)
+        self.assertIn('autoImplicit = true', v.lakefile([], PROFILE['manifest_file'], True))
+        self.assertIn('autoImplicit = false', v.lakefile([]))
+        with self.assertRaisesRegex(ValueError, 'boolean'):
+            v.lakefile([], auto_implicit='true')
+        profiles = [json.loads(p.read_text()) for p in (v.ROOT / 'profiles').glob('*.json')]
+        profiles += list(json.loads((v.ROOT / 'profiles/direct.json').read_text()).values())
+        self.assertEqual([p.get('challenge_file') for p in profiles if isinstance(p, dict) and 'auto_implicit' in p],
+                         [PROFILE['challenge_file']])
+
+
 class RequestTests(unittest.TestCase):
     def test_the_maintainer_request_selects_this_profile(self):
         profile, names = v.validate_request(dict(REQUEST))
@@ -112,6 +126,7 @@ class PrepareTests(unittest.TestCase):
                 for name in ['Solution', 'Factoring_aux', 'FactoringAux', 'VerifierChallenge', 'VerifierAudit']:
                     self.assertIn(f'name = "{name}"', lakefile)
                 self.assertNotIn('name = "Challenge"', lakefile)
+                self.assertIn('autoImplicit = true', lakefile)
                 self.assertEqual(json.loads((root / 'work/control/chains.json').read_text()),
                                  [['FactoringAux.Definitions', 'Factoring_aux', 'Solution']])
                 control = json.loads((root / 'work/control/lean.json').read_text())
